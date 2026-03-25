@@ -64,12 +64,14 @@
             background-color: #a5d6a7;
         }
 
+        /* 关键修改：移除固定高度，让图片自适应完整显示 */
         .paper-figure {
             display: block;
             width: 75%;
-            height: 220px;
+            /* 去掉 height: 220px; */
+            height: auto;
             margin: 0 auto 20px;
-            object-fit: cover;
+            object-fit: contain;
         }
         .abstract {
             background: #f5f5f5;
@@ -99,12 +101,14 @@
             font-size: 26px;
             color: #333;
         }
+        /* 关键修改：移除固定高度，让图片自适应完整显示 */
         .method-figure {
             display: block;
             width: 75%;
-            height: 220px;
+            /* 去掉 height: 220px; */
+            height: auto;
             margin: 0 auto 40px;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .audio-demo-section {
@@ -223,7 +227,7 @@
         <a href="#" class="btn">Demo</a>
     </div>
 
-    <!-- ====================== 第一张图片已插入 ====================== -->
+    <!-- 第一张图：自适应高度完整显示 -->
     <img class="paper-figure" src="image/preview.png" alt="Core Challenge: Static vs Dynamic Emotional TTS">
 
     <div class="abstract">
@@ -235,7 +239,7 @@
         <div class="method-title-bar">
             <h2>Method</h2>
         </div>
-        <!-- ====================== 第二张图片已插入 ====================== -->
+        <!-- 第二张图：自适应高度完整显示 -->
         <img class="method-figure" src="image/method.png" alt="EvoSpeech Dual-Timescale Architecture">
     </div>
 
