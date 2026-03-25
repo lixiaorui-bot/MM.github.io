@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvoSpeech 论文网页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+        body {
+            padding: 40px 20px;
+            background: #fff;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        /* 标题/作者/按钮 基础样式 */
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .author {
+            text-align: center;
+            font-size: 18px;
+            color: #0071e3;
+            margin-bottom: 10px;
+        }
+        .unit {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .meeting {
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 10px auto 25px;
+        }
+        .btn {
+            padding: 10px 22px;
+            border-radius: 6px;
+            border: none;
+            background-color: #81c784;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #a5d6a7;
+        }
+
+        /* 示意图/摘要/Method 样式 */
+        .paper-figure {
+            display: block;
+            width: 75%;
+            height: 220px;
+            margin: 0 auto 20px;
+            object-fit: cover;
+        }
+        .abstract {
+            background: #f5f5f5;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+        .abstract h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .abstract p {
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: justify;
+        }
+        .method-title-bar {
+            background: #f0f0f0;
+            width: 66%;
+            margin: 0 auto 20px;
+            padding: 16px;
+            text-align: center;
+            border-radius: 6px;
+        }
+        .method-title-bar h2 {
+            font-size: 26px;
+            color: #333;
+        }
+        .method-figure {
+            display: block;
+            width: 75%;
+            height: 220px;
+            margin: 0 auto 40px;
+            object-fit: cover;
+        }
+
+        /* —————— 语音展示：参考布局+你的论文分类 —————— */
+        .audio-demo-section {
+            margin: 60px 0 40px;
+            border-top: 2px solid #eee;
+            padding-top: 40px;
+        }
+        .audio-main-title {
+            text-align: center;
+            font-size: 30px;
+            color: #222;
+            margin-bottom: 45px;
+            font-weight: 700;
+        }
+
+        /* 大类：你的论文核心模块 */
+        .audio-category {
+            margin-bottom: 60px;
+        }
+        .category-title {
+            font-size: 24px;
+            color: #26a69a;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-left: 12px;
+            border-left: 4px solid #26a69a;
+        }
+        .category-desc {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            padding-left: 16px;
+        }
+
+        /* 小类：每个小类=多个句子，参考布局的句子组样式 */
+        .sentence-group {
+            margin-bottom: 40px;
+        }
+        .sentence-title {
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        /* 参考图的表格样式：核心布局借鉴 */
+        .demo-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e0e0e0;
+            background: #fff;
+        }
+        .demo-table th,
+        .demo-table td {
+            padding: 14px 10px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            white-space: nowrap;
+        }
+        .demo-table th {
+            background: #fafafa;
+            font-weight: 600;
+            color: #444;
+        }
+        .demo-table .emotion-col {
+            text-align: left;
+            min-width: 100px;
+            font-weight: 500;
+        }
+        .demo-table .word-col {
+            min-width: 120px;
+        }
+        .demo-table audio {
+            width: 220px;
+            height: 40px;
+            border-radius: 20px;
+            background: #f5f5f5; /* 参考图播放器样式 */
+        }
+        /* 突出你的模型列 */
+        .demo-table th.ours-col {
+            color: #e53935;
+            font-weight: 700;
+            background: #fff8f8;
+            border: 1px solid #e53935;
+        }
+        .badge {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* 底部小字致谢（增大间距，远离上方内容） */
+        .footer-note {
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+            margin-top: 100px; /* 间距从60px增至100px，远离上方语音展示区 */
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            padding-bottom: 40px; /* 底部增加内边距，避免贴底 */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 标题/作者/按钮 -->
+    <h1 class="title">EvoSpeech: Semantically Aligned Emotional Evolution Modeling for Zero-Shot Text-to-Speech</h1>
+    <div class="author">Haoxun Li, Leyuan Qu, Jiaxi Hu, Taihao Li*</div>
+    <div class="unit">Hangzhou Institute for Advanced Study, University of Chinese Academy of Sciences, China</div>
+    <div class="meeting">MM’26, November 10–14, 2026, Rio de Janeiro, Brazil</div>
+
+    <div class="button-group">
+        <a href="#" class="btn">Paper</a>
+        <a href="#" class="btn">GitHub</a>
+        <a href="#" class="btn">Demo</a>
+    </div>
+
+    <!-- 示意图 -->
+    <img class="paper-figure" src="" alt="Core Challenge: Static vs Dynamic Emotional TTS">
+
+    <!-- 摘要 -->
+    <div class="abstract">
+        <h2>Abstract</h2>
+        <p>While recent advancements in zero-shot Text-to-Speech (TTS) excel at enhancing acoustic identities, they consistently fall short in synthesizing the dynamic, fluid nature of human emotion. Prior works predominantly treat emotion as a static, utterance-level condition, resulting in rigid expressions that fail to adapt to local semantic shifts and fail to capture the fine-grained, intra-utterance transitions driven by changing semantic contexts. In this work, we present EvoSpeech, a dual-timescale architecture that dynamically maps semantic intent to natural and expressive speech. Operating along the semantic-time axis, our method constructs a context-aware affective trajectory to guide fine-grained emotional allocation across local text units, effectively mitigating the entanglement between transient emotional variations and speaker timbre. Concurrently, along the generation-time axis, we introduce an adaptive acoustic rendering strategy driven by Conditional Flow Matching (CFM) and preference optimization to balance expressive intensity with zero-shot stability, preserving the important speech features during complex emotional transitions. We further evaluate our performance on LibriTTS-R, ETD, and Expresso across basic, complex, and cross-speaker transfer scenarios against state-of-the-art baselines. EvoSpeech achieves superior transition coherence, fine-grained controllability, and zero-shot fidelity, thereby establishing a robust new paradigm for dynamically evolving emotional speech synthesis.</p>
+    </div>
+
+    <!-- Method 部分 -->
+    <div class="method-section">
+        <div class="method-title-bar">
+            <h2>Method</h2>
+        </div>
+        <img class="method-figure" src="" alt="EvoSpeech Dual-Timescale Architecture">
+    </div>
+
+    <!-- —————— 语音展示：参考布局+你的论文分类 —————— -->
+    <div class="audio-demo-section">
+        <h2 class="audio-main-title">Audio Demonstrations</h2>
+
+        <!-- 大类1：核心创新 - 动态情感演化（你的论文Abstract+Figure1） -->
+        <div class="audio-category">
+            <h3 class="category-title">1. Core Innovation: Dynamic Emotional Evolution vs Static TTS</h3>
+            <p class="category-desc">
+                We design a subjective test to verify that our model can generate <em>semantically aligned dynamic emotional evolution</em>, 
+                distinct from the static utterance-level emotion modeling in prior works. Participants are asked to perceive the emotional flow 
+                along the semantic context, and the results show that EvoSpeech produces more natural and context-consistent emotional transitions 
+                compared to baseline models.
+            </p>
+            
+            <!-- 小类1-1：句子1（论文核心示例句） -->
+            <div class="sentence-group">
+                <h4 class="sentence-title">Sentence 1: He said she was fine, but her eyes told a different story.</h4>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Emotion</th>
+                            <th>Emphasized Word</th>
+                            <th>VALL-E 2</th>
+                            <th>F5-TTS</th>
+                            <th>CosyVoice</th>
+                            <th>WeSCon</th>
+                            <th>EmoVoice</th>
+                            <th class="ours-col">EvoSpeech (Ours) <div class="badge">∇F0 ↑</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="emotion-col">Neutral</td>
+                            <td class="word-col">fine / eyes</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Sad</td>
+                            <td class="word-col">eyes / different story</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Surprise</td>
+                            <td class="word-col">fine / told</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Angry</td>
+                            <td class="word-col">said / different story</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Happy</td>
+                            <td class="word-col">fine / eyes</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 小类1-2：句子2 -->
+            <div class="sentence-group">
+                <h4 class="sentence-title">Sentence 2: I can't believe he left me alone in this cold night.</h4>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Emotion</th>
+                            <th>Emphasized Word</th>
+                            <th>VALL-E 2</th>
+                            <th>F5-TTS</th>
+                            <th>CosyVoice</th>
+                            <th>WeSCon</th>
+                            <th>EmoVoice</th>
+                            <th class="ours-col">EvoSpeech (Ours) <div class="badge">∇F0 ↑</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="emotion-col">Neutral</td>
+                            <td class="word-col">believe / left</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Sad</td>
+                            <td class="word-col">alone / cold</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Surprise</td>
+                            <td class="word-col">believe / left</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Angry</td>
+                            <td class="word-col">left / alone</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Happy</td>
+                            <td class="word-col">believe / night</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 大类2：双时间轴核心能力（你的论文Method 3.1-3.4） -->
+        <div class="audio-category">
+            <h3 class="category-title">2. Dual-Timescale Architecture Capability</h3>
+            <p class="category-desc">
+                We evaluate the two core capabilities of our dual-timescale architecture: (1) <em>semantic-time axis</em>: fine-grained emotion allocation 
+                aligned with semantic keywords; (2) <em>generation-time axis</em>: zero-shot speaker identity preservation under extreme emotional expressions. 
+                Both capabilities are verified to outperform state-of-the-art baselines across multiple datasets.
+            </p>
+            
+            <!-- 小类2-1：语义时间轴 - 细粒度情感分配 -->
+            <div class="sentence-group">
+                <h4 class="sentence-title">2.1 Semantic-Time Axis: Word-Level Fine-Grained Allocation</h4>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Emotion</th>
+                            <th>Test Sentence</th>
+                            <th>Emphasized Word</th>
+                            <th>VALL-E 2</th>
+                            <th>F5-TTS</th>
+                            <th>CosyVoice</th>
+                            <th>WeSCon</th>
+                            <th>EmoVoice</th>
+                            <th class="ours-col">EvoSpeech (Ours) <div class="badge">ASCS ↑</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="emotion-col">Neutral</td>
+                            <td>The party was fun, but I felt lonely.</td>
+                            <td class="word-col">fun / lonely</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Sad</td>
+                            <td>She laughed with tears, saying I miss you.</td>
+                            <td class="word-col">tears / miss</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Angry</td>
+                            <td>Don't leave me here alone!</td>
+                            <td class="word-col">Don't / alone</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Happy</td>
+                            <td>I finally found the lost bracelet!</td>
+                            <td class="word-col">finally / found</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Surprise</td>
+                            <td>I was confused, then surprised, finally disappointed.</td>
+                            <td class="word-col">confused / surprised / disappointed</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 小类2-2：生成时间轴 - 零样本音色保真 -->
+            <div class="sentence-group">
+                <h4 class="sentence-title">2.2 Generation-Time Axis: Zero-Shot Speaker Fidelity (Extreme Emotion)</h4>
+                <p class="category-desc" style="margin-bottom:18px; padding-left:0; font-size:15px;">
+                    We test speaker consistency under high-intensity emotions (Angry/Excited) to verify that our adaptive acoustic rendering 
+                    preserves target speaker identity without distortion, even when emotional intensity is extreme.
+                </p>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Emotion</th>
+                            <th>Test Sentence</th>
+                            <th>VALL-E 2</th>
+                            <th>F5-TTS</th>
+                            <th>CosyVoice</th>
+                            <th>WeSCon</th>
+                            <th>EmoVoice</th>
+                            <th class="ours-col">EvoSpeech (Ours) <div class="badge">SECS ↑</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="emotion-col">Angry</td>
+                            <td>Get away from me!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Excited</td>
+                            <td>We won the championship!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Sad</td>
+                            <td>My favorite pet passed away.</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Surprise</td>
+                            <td>You prepared such a big gift for me!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td class="emotion-col">Happy</td>
+                            <td>I'm so happy to see you again after 10 years!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 大类3：复杂场景性能（你的论文4.1 Expresso数据集） -->
+        <div class="audio-category">
+            <h3 class="category-title">3. Complex Scenario Evaluation (Expresso Dataset)</h3>
+            <p class="category-desc">
+                We evaluate our model on the <em>Expresso dataset</em>, which contains spontaneous emotional expressions (whisper, laugh+tear, shout, sigh) 
+                and compound emotions. The results demonstrate that EvoSpeech generates more natural and intelligible emotional speech 
+                in real-world complex scenarios, compared to baselines that struggle with non-standard vocalizations.
+            </p>
+            
+            <div class="sentence-group">
+                <h4 class="sentence-title">Compound Emotion + Spontaneous Micro-Expressions</h4>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Emotion Type</th>
+                            <th>Test Sentence</th>
+                            <th>VALL-E 2</th>
+                            <th>F5-TTS</th>
+                            <th>CosyVoice</th>
+                            <th>WeSCon</th>
+                            <th>EmoVoice</th>
+                            <th class="ours-col">EvoSpeech (Ours) <div class="badge">Natural ↑</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Whisper</td>
+                            <td>Affection+Shyness</td>
+                            <td>I love you more than anything.</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Laugh+Tear</td>
+                            <td>Joy+Longing</td>
+                            <td>She laughed with tears, saying I miss you.</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Shout</td>
+                            <td>Anger+Fear</td>
+                            <td>Don't come near me!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Sigh</td>
+                            <td>Sad+Regret</td>
+                            <td>If only I could go back to the past.</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Excited Talk</td>
+                            <td>Happy+Surprise</td>
+                            <td>I can't believe we actually made it!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 大类4：跨说话人迁移（你的论文4.1 cross-speaker transfer） -->
+        <div class="audio-category">
+            <h3 class="category-title">4. Cross-Speaker Zero-Shot Transfer</h3>
+            <p class="category-desc">
+                We verify the generalization ability of EvoSpeech to <em>unseen speakers</em> in a zero-shot setting, without any fine-tuning on target speakers. 
+                The results show that our model maintains stable emotional expression quality and speaker consistency across different genders and voice characteristics, 
+                outperforming baselines that degrade significantly on unseen speakers.
+            </p>
+            
+            <div class="sentence-group">
+                <h4 class="sentence-title">Unseen Male/Female Speakers</h4>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Target Speaker</th>
+                            <th>Emotion</th>
+                            <th>Test Sentence</th>
+                            <th>VALL-E 2</th>
+                            <th>F5-TTS</th>
+                            <th>CosyVoice</th>
+                            <th>WeSCon</th>
+                            <th>EmoVoice</th>
+                            <th class="ours-col">EvoSpeech (Ours) <div class="badge">Stable ↑</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Female (Unseen)</td>
+                            <td>Sad</td>
+                            <td>He said she was fine, but her eyes told a different story.</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Female (Unseen)</td>
+                            <td>Happy</td>
+                            <td>I finally found the lost bracelet!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Male (Unseen)</td>
+                            <td>Angry</td>
+                            <td>Don't leave me here alone!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Male (Unseen)</td>
+                            <td>Surprise</td>
+                            <td>You prepared such a big gift for me!</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                        <tr>
+                            <td>Male (Unseen)</td>
+                            <td>Neutral</td>
+                            <td>The party was fun, but I felt lonely.</td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                            <td><audio controls src=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部小字致谢（增大上下间距，视觉更舒展） -->
+    <div class="footer-note">
+        Thanks for your patience!
+    </div>
+</div>
+</body>
+</html>
